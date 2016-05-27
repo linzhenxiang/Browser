@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">\
+
+    <RelativeLayout
+        android:id="@+id/pop_back_ground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tab_menu">
+
+        <LinearLayout
+            android:id="@+id/pop_menu_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="#eeeeee"
+            android:orientation="vertical"
+            android:translationY="200dp">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/more"
+                rv_centered="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_toLeftOf="@+id/more2">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:background="#cccccc"
+                    android:padding="10dp"
+                    />
+
+            </com.andexert.library.RippleView>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tab_menu"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/pop_menu_btn"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:padding="10dp" />
+
+    </RelativeLayout>
+</RelativeLayout>
