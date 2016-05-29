@@ -118,7 +118,7 @@
     <style name="Material.Drawable.Ripple.Touch" parent="Material.Drawable.Ripple">
         <item name="rd_backgroundColor">#26CCCCCC</item>
         <item name="rd_backgroundAnimDuration">200</item>
-        <item name="rd_maxRippleRadius">48dp</item>
+        <item name="rd_maxRippleRadius">32dp</item>
         <item name="rd_rippleColor">#19CCCCCC</item>
         <item name="rd_rippleAnimDuration">300</item>
         <item name="rd_rippleType">touch</item>
@@ -129,7 +129,7 @@
     </style>
 
     <style name="Material.Drawable.Ripple.Touch.Light" parent="Material.Drawable.Ripple.Touch">
-        <item name="rd_backgroundColor">#33999999</item>
+        <item name="rd_backgroundColor">#00ffffff</item>
         <item name="rd_rippleColor">#33999999</item>
     </style>
 

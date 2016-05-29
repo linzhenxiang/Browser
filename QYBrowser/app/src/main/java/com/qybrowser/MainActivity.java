@@ -1,5 +1,6 @@
 package com.qybrowser;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
@@ -8,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.PopupWindow;
 
 import com.qybrowser.widget.PopMenu;
 import com.qybrowser.widget.YRSurImageView;
@@ -16,7 +18,7 @@ import com.skin.SkinManager;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouchListener, PopMenu.OnPopMenuDragListener {
+public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouchListener, PopMenu.OnPopMenuDragListener, PopMenu.OnPopItemListener {
     @Bind(R.id.tab_menu)
     YRSurImageView mTabMenu;
     @Bind(R.id.tab_go_back)
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouc
             }
         });
 
+        popMenu.setPopItemListener(this);
+
     }
 
     @Override
@@ -99,5 +103,15 @@ public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouc
         ViewCompat.setAlpha(mTabForWord, per);
         ViewCompat.setAlpha(mTabHome, per);
         ViewCompat.setAlpha(mTabManager, per);
+    }
+
+    @Override
+    public void OnItemClick(View view) {
+        if(popMenu.isShowing()){
+            popMenu.closeIn();
+            Intent intent = new Intent(MainActivity.this,Main2Activity.class);
+            startActivity(intent);
+        }
+
     }
 }

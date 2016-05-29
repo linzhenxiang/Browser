@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.rey.material.widget.FloatingActionButton;
  */
 public class PopMenu extends PopupWindow implements View.OnClickListener, View.OnTouchListener {
     private RelativeLayout mBackGround;
+    com.rey.material.widget.LinearLayout mPopBtn;
    private OnPopTouchListener popTouchListener;
     private LinearLayout mContent;
     private ImageView mBtn;
@@ -32,14 +34,30 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
     private State mState = State.CLOSE;
     private boolean mIsLayoutEd = false;
     private OnPopMenuDragListener dragListener;
+    private OnPopItemListener popItemListener;
+
+    public interface OnPopItemListener{
+        void OnItemClick(View view);
+    }
+
+    public void setPopItemListener(OnPopItemListener popItemListener) {
+        this.popItemListener = popItemListener;
+    }
 
     public PopMenu(final Context context, final View view) {
         mContent = (LinearLayout) view.findViewById(R.id.pop_menu_content);
+        mPopBtn = (com.rey.material.widget.LinearLayout) view.findViewById(R.id.button_bt_flat);
         mBtn = (ImageView) view.findViewById(R.id.pop_menu_btn);
         mTabMenu = (RelativeLayout) view.findViewById(R.id.tab_menu);
         mBackGround = (RelativeLayout) view.findViewById(R.id.pop_back_ground);
         setContentView(view);
-
+        mPopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                  if(popItemListener!=null)
+                      popItemListener.OnItemClick(v);
+            }
+        });
         setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         setOutsideTouchable(true);
@@ -122,6 +140,13 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
         showAtLocation(view, gravity, 0, 0);
         if (!mIsLayoutEd) return;
         open();
+
+    }
+
+    public void closeIn(){
+        dismiss();
+        mState = State.CLOSE;
+        ViewCompat.setTranslationY(mContent,mContent.getLayoutParams().height);
 
     }
 

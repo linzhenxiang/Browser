@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Administrator on 2016/1/11 0011.
@@ -35,7 +36,7 @@ public class YRSurfaceView extends SurfaceView implements SurfaceHolder.Callback
     private float D;
     private int x, y;
     private boolean isClear;
-    private  boolean isTouchUp;
+    private boolean isTouchUp;
 
 
     public YRSurfaceView(Context context, AttributeSet attrs) {
@@ -55,7 +56,7 @@ public class YRSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.DKGRAY);
+        paint.setColor(Color.parseColor("#33999999"));
     }
 
     @Override
@@ -89,14 +90,13 @@ public class YRSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         }
 
 
-        if (((ThreadPoolExecutor) cachedThreadPool).getActiveCount() == 1 && timer != 0 &&!isTouchUp) {
+        if (((ThreadPoolExecutor) cachedThreadPool).getActiveCount() == 1 && timer != 0 && !isTouchUp) {
             rippleType = NARROW;
             isClear = true;
             isRunning = true;
             cachedThreadPool.submit(this);
         }
 
-        Log.e("VV", "______D:" + D + "/timer:" + timer + "/" + ((ThreadPoolExecutor) cachedThreadPool).getActiveCount()+"/isTouchUp:"+isTouchUp);
 
     }
 
@@ -143,8 +143,7 @@ public class YRSurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void createAnim(int pointX, int pointY, int radiusMax) {
-        Log.e("VV", "createAnim A");
-
+        if (isRunning) return;
         isTouchUp = true;
         isClear = false;
         isRunning = true;
@@ -152,13 +151,11 @@ public class YRSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         this.x = pointX;
         this.y = pointY;
         this.radiusMax = (int) (radiusMax * 1.4f);
-        Log.e("VV", "createAnim B:____radiusMax" + (10 * framer) / (float) rippleDuration);
         cachedThreadPool.submit(this);
     }
 
 
     public void closeAnim(int pointX, int pointY, int radiusMax) {
-        Log.e("VV", "closeAnim A");
         rippleType = NARROW;
         isRunning = true;
         isTouchUp = false;

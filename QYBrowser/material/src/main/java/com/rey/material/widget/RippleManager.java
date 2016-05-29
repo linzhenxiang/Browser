@@ -69,6 +69,10 @@ public final class RippleManager implements View.OnClickListener{
 		Drawable background = v.getBackground();
         return background != null && background instanceof RippleDrawable && ((RippleDrawable) background).onTouch(v, event);
     }
+	public boolean onTouchEvent(View v,View rippleView, MotionEvent event){
+		Drawable background = v.getBackground();
+		return background != null && background instanceof RippleDrawable && ((RippleDrawable) background).onTouch(rippleView, event);
+	}
 	
 	@Override
 	public void onClick(View v) {

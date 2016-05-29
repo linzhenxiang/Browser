@@ -1,51 +1,65 @@
-package com.rey.material.widget;
+package com.qybrowser.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 
 import com.rey.material.app.ThemeManager;
 import com.rey.material.drawable.RippleDrawable;
 import com.rey.material.util.ViewUtil;
+import com.rey.material.widget.RippleManager;
 
-public class LinearLayout extends android.widget.LinearLayout implements ThemeManager.OnThemeChangedListener {
+/**
+ * Created by Administrator on 2016/5/30.
+ */
+public class QYSurfaceView extends SurfaceView implements ThemeManager.OnThemeChangedListener, SurfaceHolder.Callback, Runnable {
+
 
     private View mRippleView;
     private RippleManager mRippleManager;
 
     protected int mStyleId;
     protected int mCurrentStyle = ThemeManager.THEME_UNDEFINED;
+    private SurfaceHolder surfaceHolder;
+    private MotionEvent event;
+    private boolean result;
 
     public void setRippleView(View view) {
         mRippleView = view;
     }
 
-    public LinearLayout(Context context) {
+    public QYSurfaceView(Context context) {
         super(context);
 
         init(context, null, 0, 0);
     }
 
-    public LinearLayout(Context context, AttributeSet attrs) {
+    public QYSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         init(context, attrs, 0, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public LinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public QYSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init(context, attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public LinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public QYSurfaceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         init(context, attrs, defStyleAttr, defStyleRes);
@@ -55,6 +69,11 @@ public class LinearLayout extends android.widget.LinearLayout implements ThemeMa
         applyStyle(context, attrs, defStyleAttr, defStyleRes);
         if (!isInEditMode())
             mStyleId = ThemeManager.getStyleId(context, attrs, defStyleAttr, defStyleRes);
+        surfaceHolder = getHolder();
+        surfaceHolder.addCallback(this);
+        setZOrderOnTop(true);
+        surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
+
     }
 
     public void applyStyle(int resId) {
@@ -123,15 +142,51 @@ public class LinearLayout extends android.widget.LinearLayout implements ThemeMa
         }
     }
 
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+    }
+
+
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         boolean result = super.onTouchEvent(event);
-
-        if (mRippleView != null)
-            return getRippleManager().onTouchEvent(this, mRippleView, event) || result;
-        else
-            return getRippleManager().onTouchEvent(this, event) || result;
+        new Thread(this).start();
+        this.event = event;
+        return super.onTouchEvent(event) ;
+//        if (mRippleView != null)
+//            return getRippleManager().onTouchEvent(this, mRippleView, event) || result;
+//        else
+//            return getRippleManager().onTouchEvent(this, event) || result;
 
     }
 
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
+
+    @Override
+    public void run() {
+        Canvas canvas = null;
+        
+        try {
+            canvas = surfaceHolder.lockCanvas();
+            getRippleManager().onTouchEvent(this, event);
+        } finally {
+            if (canvas != null) {
+                surfaceHolder.unlockCanvasAndPost(canvas);
+            }
+        }
+    }
 }
