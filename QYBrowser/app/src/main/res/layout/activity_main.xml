@@ -2,218 +2,224 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.qybrowser.widget.QYNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_scroll_view"
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_above="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/ic_shape_weater_background_color"
-        android:overScrollMode="always"
-        android:tag="skin:ic_shape_weater_background_color:background"
-        tools:context="com.qybrowser.MainActivity">
+        android:layout_height="match_parent">
+    </FrameLayout>
+    <!--<com.qybrowser.widget.QYNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:id="@+id/main_scroll_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@drawable/ic_shape_weater_background_color"-->
+        <!--android:overScrollMode="always"-->
+        <!--android:tag="skin:ic_shape_weater_background_color:background"-->
+        <!--tools:context="com.qybrowser.MainActivity">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20dp"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp">
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="20dp"-->
+                <!--android:paddingLeft="6dp"-->
+                <!--android:paddingRight="6dp">-->
 
-                <com.qybrowser.view.RYDegreeView
-                    android:id="@+id/man_weather_degree"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="16dp"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8" />
+                <!--<com.qybrowser.view.RYDegreeView-->
+                    <!--android:id="@+id/man_weather_degree"-->
+                    <!--android:layout_width="90dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginLeft="8dp"-->
+                    <!--android:layout_marginTop="16dp"-->
+                    <!--android:scaleX="0.8"-->
+                    <!--android:scaleY="0.8" />-->
 
 
-                <TextView
-                    android:id="@+id/main_weather_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/man_weather_degree"
-                    android:layout_below="@+id/man_weather_degree"
-                    android:padding="8dp"
-                    android:text="周三   3月16日"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/main_weather_date"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignLeft="@+id/man_weather_degree"-->
+                    <!--android:layout_below="@+id/man_weather_degree"-->
+                    <!--android:padding="8dp"-->
+                    <!--android:text="周三   3月16日"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="12sp" />-->
 
-                <TextView
-                    android:layout_width="340dp"
-                    android:layout_height="38dp"
-                    android:layout_below="@+id/main_weather_date"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:background="@android:color/white" />
+                <!--<TextView-->
+                    <!--android:layout_width="340dp"-->
+                    <!--android:layout_height="38dp"-->
+                    <!--android:layout_below="@+id/main_weather_date"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_marginTop="16dp"-->
+                    <!--android:background="@android:color/white" />-->
 
-                <TextView
-                    android:id="@+id/main_weather_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/man_weather_degree"
-                    android:layout_marginTop="4dp"
-                    android:layout_toRightOf="@+id/man_weather_degree"
-                    android:text="51  空气良"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/main_weather_state"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignTop="@+id/man_weather_degree"-->
+                    <!--android:layout_marginTop="4dp"-->
+                    <!--android:layout_toRightOf="@+id/man_weather_degree"-->
+                    <!--android:text="51  空气良"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="12sp" />-->
 
-                <TextView
-                    android:id="@+id/weather_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/main_weather_state"
-                    android:layout_toRightOf="@+id/man_weather_degree"
-                    android:text="阴转多云"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/weather_state"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/main_weather_state"-->
+                    <!--android:layout_toRightOf="@+id/man_weather_degree"-->
+                    <!--android:text="阴转多云"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="12sp" />-->
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/man_weather_degree"
-                    android:layout_alignTop="@+id/man_weather_degree"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginLeft="-8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/man_weather_degree"
-                    android:background="@android:color/white" />
+                <!--<View-->
+                    <!--android:layout_width="1dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignBottom="@+id/man_weather_degree"-->
+                    <!--android:layout_alignTop="@+id/man_weather_degree"-->
+                    <!--android:layout_marginBottom="6dp"-->
+                    <!--android:layout_marginLeft="-8dp"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:layout_toRightOf="@+id/man_weather_degree"-->
+                    <!--android:background="@android:color/white" />-->
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/main_weather_date"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginRight="16dp">
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignBottom="@+id/main_weather_date"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginBottom="8dp"-->
+                    <!--android:layout_marginRight="16dp">-->
 
-                    <ImageView
-                        android:id="@+id/degree_w"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/w_dyun_icon" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/degree_w"-->
+                        <!--android:layout_width="32dp"-->
+                        <!--android:layout_height="32dp"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:background="@drawable/w_dyun_icon" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/degree_w"
-                        android:layout_centerHorizontal="true"
-                        android:text="17 ~ 6^C"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp" />
-                </RelativeLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@+id/degree_w"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:text="17 ~ 6^C"-->
+                        <!--android:textColor="@android:color/white"-->
+                        <!--android:textSize="12sp" />-->
+                <!--</RelativeLayout>-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:orientation="vertical">-->
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                <!--<android.support.v7.widget.RecyclerView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>-->
 
-                <Button
-                    android:id="@+id/btn_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#9c55ff" />
+                <!--<Button-->
+                    <!--android:id="@+id/btn_1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="#9c55ff" />-->
 
-                <Button
-                    android:id="@+id/btn_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#7155ff" />
+                <!--<Button-->
+                    <!--android:id="@+id/btn_2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="#7155ff" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
+            <!--</LinearLayout>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-    </com.qybrowser.widget.QYNestedScrollView>
+    <!--</com.qybrowser.widget.QYNestedScrollView>-->
 
 
     <com.qybrowser.widget.YRTabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"

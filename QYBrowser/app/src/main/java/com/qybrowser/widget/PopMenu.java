@@ -19,14 +19,13 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.qybrowser.R;
-import com.rey.material.widget.FloatingActionButton;
 
 /**
  * Created by Administrator on 2016/5/27 0027.
  */
 public class PopMenu extends PopupWindow implements View.OnClickListener, View.OnTouchListener {
     private RelativeLayout mBackGround;
-    com.rey.material.widget.LinearLayout mPopBtn;
+    LinearLayout mPopBtn;
    private OnPopTouchListener popTouchListener;
     private LinearLayout mContent;
     private ImageView mBtn;
@@ -35,18 +34,11 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
     private boolean mIsLayoutEd = false;
     private OnPopMenuDragListener dragListener;
     private OnPopItemListener popItemListener;
-
-    public interface OnPopItemListener{
-        void OnItemClick(View view);
-    }
-
-    public void setPopItemListener(OnPopItemListener popItemListener) {
-        this.popItemListener = popItemListener;
-    }
+    ObjectAnimator openAnim, closeAnim;
 
     public PopMenu(final Context context, final View view) {
         mContent = (LinearLayout) view.findViewById(R.id.pop_menu_content);
-        mPopBtn = (com.rey.material.widget.LinearLayout) view.findViewById(R.id.button_bt_flat);
+        mPopBtn = (LinearLayout) view.findViewById(R.id.button_bt_flat);
         mBtn = (ImageView) view.findViewById(R.id.pop_menu_btn);
         mTabMenu = (RelativeLayout) view.findViewById(R.id.tab_menu);
         mBackGround = (RelativeLayout) view.findViewById(R.id.pop_back_ground);
@@ -54,8 +46,8 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
         mPopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  if(popItemListener!=null)
-                      popItemListener.OnItemClick(v);
+                if (popItemListener != null)
+                    popItemListener.OnItemClick(v);
             }
         });
         setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -72,6 +64,18 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
         });
         mBtn.setOnTouchListener(this);
         mBtn.setOnClickListener(this);
+        initAnim();
+    }
+    public interface OnPopItemListener{
+        void OnItemClick(View view);
+    }
+
+    public void setPopItemListener(OnPopItemListener popItemListener) {
+        this.popItemListener = popItemListener;
+    }
+
+    public boolean isOpened() {
+        return mState == State.OPEN;
     }
 
     public static Integer evaluate(float fraction, Object startValue, Integer endValue) {
@@ -102,20 +106,20 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
         }
     }
 
-    private void open() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mContent, "translationY", mContent.getLayoutParams().height, 0);
-        objectAnimator.setDuration(300);
-        objectAnimator.setInterpolator(new FastOutSlowInInterpolator());
-        objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    private void initAnim() {
+        openAnim = ObjectAnimator.ofFloat(mContent, "translationY", mContent.getLayoutParams().height, 0);
+        openAnim.setDuration(300);
+        openAnim.setInterpolator(new FastOutSlowInInterpolator());
+        openAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if(dragListener!=null)
+                if (dragListener != null && mState == State.DRAGGING)
                     dragListener.onDragOpen(animation.getAnimatedFraction());
                 mBackGround.setBackgroundColor(evaluate(animation.getAnimatedFraction(), Color.TRANSPARENT, Color.parseColor("#66000000")));
 
             }
         });
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
+        openAnim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -130,43 +134,21 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
 
             }
         });
-        objectAnimator.start();
-    }
 
-    public void show(View view, int gravity) {
-        if (mState == State.OPEN || mState == State.DRAGGING)
-            return;
-
-        showAtLocation(view, gravity, 0, 0);
-        if (!mIsLayoutEd) return;
-        open();
-
-    }
-
-    public void closeIn(){
-        dismiss();
-        mState = State.CLOSE;
-        ViewCompat.setTranslationY(mContent,mContent.getLayoutParams().height);
-
-    }
-
-    public void close() {
-
-        if (mState == State.CLOSE || mState == State.DRAGGING)
-            return;
-
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mContent, "translationY", mContent.getLayoutParams().height);
-        objectAnimator.setDuration(200);
-        objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        closeAnim = ObjectAnimator.ofFloat(mContent, "translationY", mContent.getLayoutParams().height);
+        closeAnim.setDuration(200);
+        closeAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+        closeAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if(dragListener!=null)
+                if (dragListener != null && mState == State.DRAGGING) {
                     dragListener.onDragClose(animation.getAnimatedFraction());
+
+                }
                 mBackGround.setBackgroundColor(evaluate(animation.getAnimatedFraction(), Color.parseColor("#66000000"), Color.TRANSPARENT));
             }
         });
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
+        closeAnim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -182,7 +164,37 @@ public class PopMenu extends PopupWindow implements View.OnClickListener, View.O
 
             }
         });
-        objectAnimator.start();
+    }
+    private void open() {
+        openAnim.start();
+    }
+
+    public void show(View view, int gravity) {
+        if (mState == State.OPEN || mState == State.DRAGGING || openAnim.isRunning())
+            return;
+
+        showAtLocation(view, gravity, 0, 0);
+        if (!mIsLayoutEd) return;
+        open();
+
+    }
+
+    public void closeIn(){
+        if (openAnim.isRunning())
+            openAnim.cancel();
+        dismiss();
+        mState = State.CLOSE;
+        ViewCompat.setTranslationY(mContent,mContent.getLayoutParams().height);
+
+    }
+
+    public void close() {
+
+        if (mState == State.CLOSE || mState == State.DRAGGING || closeAnim.isRunning())
+            return;
+
+
+        closeAnim.start();
 
 
     }

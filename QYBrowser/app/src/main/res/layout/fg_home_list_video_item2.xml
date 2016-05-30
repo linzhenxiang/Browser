@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/fg_home_video_bottom_img"
+        android:layout_width="130dp"
+        android:layout_height="72dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/car" />
+
+    <TextView
+        android:id="@+id/fg_home_video_bottom_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@+id/fg_home_video_bottom_img"
+        android:textSize="14sp"
+        android:textColor="#FF555555"
+        android:text="倒萨大大大大"
+        />
+
+    <TextView
+        android:id="@+id/fg_home_video_bottom_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fg_home_video_bottom_title"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/fg_home_video_bottom_img"
+        android:text="倒萨大大大大阿顶顶顶顶顶顶顶顶顶"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fg_home_video_bottom_img"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/fg_home_video_bottom_img"
+        android:text="观看：5654"
+        android:textSize="10sp" />
+</RelativeLayout>

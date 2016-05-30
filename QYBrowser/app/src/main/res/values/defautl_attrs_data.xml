@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fg_home_titles">
+        <item>千影</item>
+        <item>爱奇艺</item>
+        <item>优酷</item>
+        <item>土豆</item>
+        <item>乐视</item>
+        <item>百度</item>
+        <item>腾讯</item>
+        <item>淘宝</item>
+        <item>新浪</item>
+        <item>搜狐</item>
+    </string-array>
+    <array name="fg_home_urls">
+        <item>http://m.iqying.com</item>
+        <item>http://m.iqiyi.com</item>
+        <item>http://www.youku.com</item>
+        <item>http://www.tudou.com</item>
+        <item>http://m.letv.com</item>
+        <item>http://m.baidu.com/</item>
+        <item>http://info.3g.qq.com</item>
+        <item>https://m.taobao.com/</item>
+        <item>http://sina.cn</item>
+        <item>http://m.sohu.com</item>
+
+    </array>
+    <array name="fg_home_imgs">
+        <item>@drawable/ic_qying</item>
+        <item>@drawable/ic_iqyi</item>
+        <item>@drawable/ic_youku</item>
+        <item>@drawable/ic_tudou</item>
+        <item>@drawable/ic_letv</item>
+        <item>@drawable/ic_baidu</item>
+        <item>@drawable/ic_tx</item>
+        <item>@drawable/ic_taobao</item>
+        <item>@drawable/ic_xlang</item>
+        <item>@drawable/ic_shouhu</item>
+    </array>
+</resources>

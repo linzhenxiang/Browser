@@ -1,24 +1,26 @@
 package com.qybrowser;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.PopupWindow;
 
+import com.qybrowser.fragment.HomeFragment;
+import com.qybrowser.fragment.MenuFragment;
 import com.qybrowser.widget.PopMenu;
 import com.qybrowser.widget.YRSurImageView;
 import com.skin.SkinManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
+import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
-public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouchListener, PopMenu.OnPopMenuDragListener, PopMenu.OnPopItemListener {
+public class MainActivity extends SwipeBackActivity implements PopMenu.OnPopTouchListener, PopMenu.OnPopMenuDragListener, PopMenu.OnPopItemListener {
     @Bind(R.id.tab_menu)
     YRSurImageView mTabMenu;
     @Bind(R.id.tab_go_back)
@@ -41,24 +43,24 @@ public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouc
         popMenu = new PopMenu(this, view);
         popMenu.setPopTouchListener(this);
         popMenu.setDragListener(this);
-        findViewById(R.id.btn_1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinManager.getInstance().changeSkinColor(Color.parseColor("#9c55ff"));
-            }
-        });
-
-        findViewById(R.id.btn_2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinManager.getInstance().changeSkinColor(Color.parseColor("#7155ff"));
-                if (!popMenu.isShowing()) {
-                    popMenu.show(getWindow().getDecorView(), Gravity.NO_GRAVITY);
-                } else {
-                    popMenu.close();
-                }
-            }
-        });
+//        findViewById(R.id.btn_1).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SkinManager.getInstance().changeSkinColor(Color.parseColor("#9c55ff"));
+//            }
+//        });
+//
+//        findViewById(R.id.btn_2).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SkinManager.getInstance().changeSkinColor(Color.parseColor("#7155ff"));
+//                if (!popMenu.isShowing()) {
+//                    popMenu.show(getWindow().getDecorView(), Gravity.NO_GRAVITY);
+//                } else {
+//                    popMenu.close();
+//                }
+//            }
+//        });
 
         findViewById(R.id.tab_menu).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +75,16 @@ public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouc
 
         popMenu.setPopItemListener(this);
 
+        if (savedInstanceState == null) {
+            start(HomeFragment.newInstance());
+        }
+
+        getSwipeBackLayout().setSwipeEnable(false);
+    }
+
+    @Override
+    protected int setContainerId() {
+        return R.id.main_content;
     }
 
     @Override
@@ -89,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouc
 
     @Override
     public void onDragOpen(float per) {
+        Log.e("VV", "__________onDragOpen:" + per);
         setTabAlpha(1 - per);
     }
 
@@ -109,9 +122,30 @@ public class MainActivity extends AppCompatActivity implements PopMenu.OnPopTouc
     public void OnItemClick(View view) {
         if(popMenu.isShowing()){
             popMenu.closeIn();
-            Intent intent = new Intent(MainActivity.this,Main2Activity.class);
-            startActivity(intent);
+            setTabAlpha(1);
         }
+        start(MenuFragment.newInstance());
 
+    }
+
+    @Override
+    protected FragmentAnimator onCreateFragmentAnimator() {
+        // 设置默认Fragment动画  默认竖向(和安卓5.0以上的动画相同)
+//        return super.onCreateFragmentAnimator();
+        // 设置横向(和安卓4.x动画相同)
+//        return new DefaultHorizontalAnimator();
+        // 设置自定义动画
+        return new FragmentAnimator(R.anim.h_fragment_enter, R.anim.h_fragment_exit, R.anim.h_fragment_pop_enter, R.anim.h_fragment_pop_exit);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (popMenu.isShowing()) {
+                popMenu.close();
+                return false;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 }

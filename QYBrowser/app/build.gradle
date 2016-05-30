@@ -32,4 +32,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.3.0'
     compile project(':material')
     compile files('libs/butterknife-7.0.1.jar')
+    compile project(':fragmentation')
+    compile project(':fragmentation_swipeback')
 }

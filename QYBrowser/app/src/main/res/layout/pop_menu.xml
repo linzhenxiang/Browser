@@ -17,19 +17,17 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_alignParentBottom="true"
-            android:background="#ffffff"
+            android:background="#E0ffffff"
             android:orientation="vertical"
             >
 
-            <com.rey.material.widget.LinearLayout
+            <LinearLayout
+                android:orientation="horizontal"
                 android:clickable="true"
                 android:id="@+id/button_bt_flat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null"
-                android:text="BUTTON"
-                style="@style/LightFlatButtonRippleStyle"
-                app:v_styleId="@array/button_flat"/>
+            />
 
 
         </LinearLayout>

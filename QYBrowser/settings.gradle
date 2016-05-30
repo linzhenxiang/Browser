@@ -1,1 +1,1 @@
-include ':app', ':skin',":material"
+include ':app', ':skin',":material",":fragmentation",":fragmentation_swipeback"
