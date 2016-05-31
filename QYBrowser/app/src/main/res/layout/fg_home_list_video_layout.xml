@@ -4,33 +4,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:paddingLeft="8dp"-->
-        <!--android:paddingRight="8dp"-->
-        <!--android:id="@+id/fg_home_list_video_top_recycle"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fg_home_list_video_top_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" />
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:paddingLeft="8dp"-->
-        <!--android:paddingRight="8dp"-->
-        <!--android:layout_below="@+id/fg_home_list_video_top_recycle"-->
-        <!--android:id="@+id/fg_home_list_video_bottom_recycle"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>  <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>  <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
-    <include layout="@layout/fg_home_list_video_item2"/>
+    <View
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="?attr/dividerVertical" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fg_home_list_video_bottom_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fg_home_list_video_top_recycle" />
+
 
 
 

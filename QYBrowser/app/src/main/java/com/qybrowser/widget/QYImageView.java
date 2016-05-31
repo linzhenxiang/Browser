@@ -1,12 +1,10 @@
 package com.qybrowser.widget;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.ViewParent;
 import android.widget.ImageView;
-
-import com.rey.material.widget.LinearLayout;
 
 /**
  * Created by Administrator on 2016/5/27 0027.
@@ -26,12 +24,18 @@ public class QYImageView extends ImageView {
 
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        ViewParent view = getParent();
-        if (view instanceof LinearLayout) {
-            ((LinearLayout) view).setRippleView(this);
-        }
-        return false;
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (isPressed())
+            canvas.drawColor(Color.parseColor("#33000000"));
+    }
+
+
+
+    @Override
+    protected void dispatchSetPressed(boolean pressed) {
+        super.dispatchSetPressed(pressed);
+        invalidate();
     }
 }
 

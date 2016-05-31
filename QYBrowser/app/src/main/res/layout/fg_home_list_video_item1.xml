@@ -2,23 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:cb="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
     android:orientation="vertical">
 
-    <ImageView
+    <com.qybrowser.widget.QYImageView
         android:id="@+id/fg_home_video_top_img"
         android:layout_width="match_parent"
         android:src="@drawable/car"
         android:scaleType="centerCrop"
-        android:layout_height="72dp" />
+        android:layout_height="96dp" />
 
-    <TextView
-        android:layout_below="@+id/fg_home_video_top_img"
-        android:text="蒋欣就是PS界的贾乃亮！网友：这P图也是没谁了"
-        android:textSize="12sp"
-        android:maxLines="2"
-        android:lineSpacingMultiplier="1.1"
-        android:textColor="#FF6D6D6D"
+    <me.codeboy.android.aligntextview.AlignTextView
         android:id="@+id/fg_home_video_top_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fg_home_video_top_img"
+        android:paddingTop="2dp"
+        android:text="这P图也是没谁了没谁了"
+        android:maxLines="1"
+        android:textColor="#FF444444"
+        android:textSize="14sp"
+        cb:align="left" />
+    <TextView
+        android:layout_below="@+id/fg_home_video_top_text"
+        android:paddingTop="2dp"
+        android:text="不用进行选择复制"
+        android:paddingBottom="2dp"
+        android:textSize="12sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </RelativeLayout>

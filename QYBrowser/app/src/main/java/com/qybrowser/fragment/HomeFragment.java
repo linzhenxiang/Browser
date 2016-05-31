@@ -56,7 +56,6 @@ public class HomeFragment extends SwipeBackFragment {
      * clk
      */
     private void initRecycle() {
-
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
@@ -68,9 +67,6 @@ public class HomeFragment extends SwipeBackFragment {
 
 
 
-    @Override
-    protected FragmentAnimator onCreateFragmentAnimation() {
-        return new DefaultHorizontalAnimator();
-    }
+
 
 }

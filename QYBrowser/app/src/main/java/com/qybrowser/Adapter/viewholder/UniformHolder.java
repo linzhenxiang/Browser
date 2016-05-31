@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import android.widget.TextView;
 import com.helper.ItemDragHelperCallback;
 import com.helper.ItemTouchHelper;
 import com.qybrowser.R;
-import com.qybrowser.fragment.MenuFragment;
+import com.qybrowser.fragment.BrowserFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -85,9 +84,10 @@ public class UniformHolder extends RecyclerView.ViewHolder {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mActivity.start(MenuFragment.newInstance());
+                    mActivity.start(BrowserFragment.newInstance());
                 }
             });
+
             itemView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -102,7 +102,7 @@ public class UniformHolder extends RecyclerView.ViewHolder {
                         );
                         animatorSet.setDuration(100);
                         animatorSet.setInterpolator(new FastOutSlowInInterpolator());
-                        animatorSet.start();
+//                        animatorSet.start();
                     }else{
                         ViewCompat.setPivotX(itemView, itemView.getWidth() / 2);
                         ViewCompat.setPivotY(itemView, itemView.getHeight() / 2);
@@ -114,7 +114,7 @@ public class UniformHolder extends RecyclerView.ViewHolder {
                         );
                         animatorSet.setDuration(300);
                         animatorSet.setInterpolator(new FastOutLinearInInterpolator());
-                        animatorSet.start();
+//                        animatorSet.start();
                     }
 
                     return false;

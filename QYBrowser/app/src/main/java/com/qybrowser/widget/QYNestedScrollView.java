@@ -4,10 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -52,6 +49,7 @@ public class QYNestedScrollView extends ScrollView {
     private float mInitialMotionX;
     private float mInitialMotionY;
     private float mDexY;
+    private float mOldDexY;
     private int downX;
     private int downY;
 
@@ -66,8 +64,8 @@ public class QYNestedScrollView extends ScrollView {
 
     public QYNestedScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        final ViewConfiguration configuration = ViewConfiguration.get(context);
-        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+        final ViewConfiguration vc = ViewConfiguration.get(context);
+        mTouchSlop = vc.getScaledTouchSlop();
 
     }
 
@@ -116,6 +114,10 @@ public class QYNestedScrollView extends ScrollView {
                 }
 
                 final int pointerIndex = MotionEventCompat.findPointerIndex(ev, activePointerId);
+                if (pointerIndex == INVALID_POINTER) {
+                    // If we don't have a valid id, the touch down wasn't on content.
+                    return true;
+                }
                 final float x = MotionEventCompat.getX(ev, pointerIndex);
                 final float dx = x - mLastMotionX;
                 final float xDiff = Math.abs(dx);
@@ -124,26 +126,24 @@ public class QYNestedScrollView extends ScrollView {
                 if (DEBUG)
                     Log.v(TAG, "Moved x to " + x + "," + y + " diff=xDiff:" + xDiff + ",yDiff:" + yDiff + "/mTouchSlop:" + mTouchSlop);
 
-//                if (xDiff > mTouchSlop && xDiff > yDiff) {
-//                    Log.e("VV","___________ACTION_DOWN X:"+mDexY+"/mInitialMotionY:"+mInitialMotionY+"/ev.getY():"+ev.getY()+"/xDiff:"+xDiff+"/yDiff:"+yDiff);
-//
-//                    if (DEBUG) Log.v(TAG, "Starting drag!");
-//                    mIsBeingDragged = true;
-//                    requestParentDisallowInterceptTouchEvent(true);
-//                    mLastMotionX = dx > 0 ? mInitialMotionX + mTouchSlop :
-//                            mInitialMotionX - mTouchSlop;
-//                    mLastMotionY = y;
-//                    return false;
-//                } else if (yDiff > mTouchSlop) {
-//                    Log.e("VV","___________ACTION_DOWN Y:"+mDexY+"/mInitialMotionY:"+mInitialMotionY+"/ev.getY():"+ev.getY());
-//
-//                    // The finger has moved enough in the vertical
-//                    // direction to be counted as a drag...  abort
-//                    // any attempt to drag horizontally, to work correctly
-//                    // with children that have scrolling containers.
-//                    if (DEBUG) Log.v(TAG, "Starting unable to drag!");
-//                    return true;
-//                }
+                if (xDiff > mTouchSlop) {
+
+                    if (DEBUG) Log.v(TAG, "Starting drag!");
+                    mIsBeingDragged = true;
+                    requestParentDisallowInterceptTouchEvent(true);
+                    mLastMotionX = dx > 0 ? mInitialMotionX + mTouchSlop :
+                            mInitialMotionX - mTouchSlop;
+                    mLastMotionY = y;
+                    return true;
+                } else if (yDiff > mTouchSlop) {
+
+                    // The finger has moved enough in the vertical
+                    // direction to be counted as a drag...  abort
+                    // any attempt to drag horizontally, to work correctly
+                    // with children that have scrolling containers.
+                    if (DEBUG) Log.v(TAG, "Starting unable to drag!");
+                    return true;
+                }
                 break;
             }
 
@@ -172,6 +172,7 @@ public class QYNestedScrollView extends ScrollView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        Log.e("VV", "___________onTouchEvent______:" + ev.getAction());
 
         switch (ev.getAction()) {
 
@@ -187,7 +188,7 @@ public class QYNestedScrollView extends ScrollView {
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.e("VV","___________ACTION_MOVE:"+mDexY+"/mInitialMotionY:"+mInitialMotionY+"/ev.getY():"+ev.getY());
+
 
                 if (getTranslationY() == 0) {
                     if (getScrollY() != 0) {
@@ -201,12 +202,15 @@ public class QYNestedScrollView extends ScrollView {
                             ViewCompat.setTranslationY(getChildAt(0), Math.max((int) (mDexY / 4), 0));
                             return true;
                         } else {
+                            Log.e("VV", "___________mDexY<0:" + mDexY + "/mInitialMotionY:" + mInitialMotionY + "/ev.getY():" + ev.getY());
+
                             ViewCompat.setTranslationY(getChildAt(0), 0);
                             return super.onTouchEvent(ev);
                         }
                     }
                 } else {
                     Log.e("VV","___________mDexY:"+mDexY+"/mInitialMotionY:"+mInitialMotionY+"/ev.getY():"+ev.getY());
+
                     mDexY = ev.getY() - mInitialMotionY;
                     if (mDexY > 0) {
                         ViewCompat.setTranslationY(getChildAt(0), Math.max((int) (mDexY / 4), 0));

@@ -21,14 +21,6 @@ public class QYRecycleView extends RecyclerView {
     public QYRecycleView(Context context) {
         super(context);
     }
-//s
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent e) {
-        return false;
-    }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent e) {
-        return false;
-    }
+
 }
