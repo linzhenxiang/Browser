@@ -204,6 +204,9 @@ public abstract class SupportActivity extends AppCompatActivity {
         mPopMulitpleNoAnim = false;
     }
 
+    public int getFragmentRecords(){
+       return mFragmentation.getFragmentRecords().size();
+    }
     /**
      * 显示栈视图,调试时使用
      */

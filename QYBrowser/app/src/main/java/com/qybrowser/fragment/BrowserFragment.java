@@ -1,18 +1,26 @@
 package com.qybrowser.fragment;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.qybrowser.MainActivity;
 import com.qybrowser.R;
 import com.qybrowser.web.utils.X5WebView;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
@@ -31,38 +39,28 @@ import com.tencent.smtt.utils.TbsLog;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.SwipeBackLayout;
+import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 
-public class BrowserFragment extends SwipeBackFragment {
+public class BrowserFragment extends SwipeBackFragment implements SwipeBackLayout.OnSwipeListener {
     public static final int MSG_OPEN_TEST_URL = 0;
-//    private ViewGroup mViewParent;
-//    private ImageButton mBack;
-//    private ImageButton mForward;
-//    private ImageButton mRefresh;
-//    private ImageButton mExit;
-//    private ImageButton mHome;
-//    private ImageButton mTestProcesses;
-//    private ImageButton mTestWebviews;
-//    private ImageButton mMore;
-//    private ImageButton mClearData;
-//    private ImageButton	mOpenFile;
-//    private Button mGo;
-//    private EditText mUrl;
-//
-//    private RelativeLayout mMenu;
     public static final int MSG_INIT_UI = 1;
-    //	private static final String mHomeUrl = "http://app.html5.qq.com/navi/index";
-    private static final String mHomeUrl = "http://app.html5.qq.com/navi/index";
+    private static final String mHomeUrl = "http://baidu.com";
     private static final String TAG = "SdkDemo";
     private static final int MAX_LENGTH = 14;
     private final int disable = 120;
     private final int enable = 255;
-
-//    private ProgressBar mPageLoadingProgressBar = null;
+    private boolean mEnableLoadUrl = true;
     private final int mUrlStartNum = 0;
     private final int mUrlEndNum = 108;
+
+    private TextView mUrl;
     boolean[] m_selected = new boolean[]{true, true, true, true, false,
             false, true};
+    private RelativeLayout mSearchBar;
     /**
      * 作为一个浏览器的示例展示出来，采用android+web的模式
      */
@@ -72,7 +70,8 @@ public class BrowserFragment extends SwipeBackFragment {
     private URL mIntentUrl;
     private TEST_ENUM_FONTSIZE m_font_index = TEST_ENUM_FONTSIZE.FONT_SIZE_NORMAL;
     private int mCurrentUrl = mUrlStartNum;
-    /* private class TestHandler extends */private Handler mTestHandler = new Handler() {
+    /* private class TestHandler extends */
+    private Handler mTestHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -96,6 +95,7 @@ public class BrowserFragment extends SwipeBackFragment {
         }
     };
 
+    private ContentLoadingProgressBar progressBar;
 
 //    private void initBtnListenser() {
 //        mBack = (ImageButton) findViewById(R.id.btnBack1);
@@ -310,11 +310,15 @@ public class BrowserFragment extends SwipeBackFragment {
         return fragment;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.web_activity_main, container, false);
+        Log.e("VV", "______onCreateView");
         init(view);
+
         return attachToSwipeBack(view);
     }
 
@@ -323,6 +327,7 @@ public class BrowserFragment extends SwipeBackFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("VV", "______onResume:");
 
     }
 
@@ -418,8 +423,11 @@ public class BrowserFragment extends SwipeBackFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-		/*getWindow().addFlags(
+        getSwipeBackLayout().addSwipeListener(this);
+        progressBar = ((MainActivity) getActivity()).getProgressBar();
+        mUrl = ((MainActivity) getActivity()).getSearchTitle();
+        mSearchBar = ((MainActivity) getActivity()).getSearchBar();
+        /*getWindow().addFlags(
                 android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 //        mViewParent = (ViewGroup) findViewById(R.id.web_view);
 
@@ -428,7 +436,7 @@ public class BrowserFragment extends SwipeBackFragment {
         // preloadX5Check -- call this before webview creation
         //QbSdk.preloadX5Check(this);
 
-//        QbSdk.preInit(getActivity());
+        QbSdk.preInit(getActivity());
 
 //        this.webViewTransportTest();
 
@@ -474,7 +482,6 @@ public class BrowserFragment extends SwipeBackFragment {
     }
 
     private void init(View view) {
-
         // ========================================================
         //
         //mWebView = new DemoWebView(this);
@@ -494,6 +501,7 @@ public class BrowserFragment extends SwipeBackFragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 return false;
+
             }
 
             @Override
@@ -511,8 +519,8 @@ public class BrowserFragment extends SwipeBackFragment {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 moreMenuClose();
-                // mTestHandler.sendEmptyMessage(MSG_OPEN_TEST_URL);
-                mTestHandler.sendEmptyMessageDelayed(MSG_OPEN_TEST_URL, 5000);// 5s?
+//                 mTestHandler.sendEmptyMessage(MSG_OPEN_TEST_URL);
+//                mTestHandler.sendEmptyMessageDelayed(MSG_OPEN_TEST_URL, 5000);// 5s?
                 if (Integer.parseInt(android.os.Build.VERSION.SDK) >= 16)
                     changGoForwardButton(view);
 				/* mWebView.showLog("test Log"); */
@@ -526,36 +534,35 @@ public class BrowserFragment extends SwipeBackFragment {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 TbsLog.d(TAG, "title: " + title);
-//                if (mUrl == null)
-//                    return;
-//                if (!mWebView.getUrl().equalsIgnoreCase(mHomeUrl)) {
-//                    if (title != null && title.length() > MAX_LENGTH)
-//                        mUrl.setText(title.subSequence(0, MAX_LENGTH) + "...");
-//                    else
-//                        mUrl.setText(title);
-//                } else {
-//                    mUrl.setText("");
-//                }
+                if (mUrl == null)
+                    return;
+                if (!mWebView.getUrl().equalsIgnoreCase(mHomeUrl)) {
+                    if (title != null && title.length() > MAX_LENGTH)
+                        mUrl.setText(title.subSequence(0, MAX_LENGTH) + "...");
+                    else
+                        mUrl.setText(title);
+                } else {
+                    mUrl.setText(view.getUrl());
+                }
             }
 
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 // TODO Auto-generated method stub
-//                if (newProgress > 60 && mWebView.getVisibility() == View.GONE) {
-//                    mWebView.setVisibility(View.VISIBLE);
-//                }
-//                mPageLoadingProgressBar.setProgress(newProgress);
-//                if (mPageLoadingProgressBar != null && newProgress != 100) {
-//                    mPageLoadingProgressBar.setVisibility(View.VISIBLE);
-//                } else if (mPageLoadingProgressBar != null) {
-//                    mPageLoadingProgressBar.setVisibility(View.GONE);
-//
-//
-//                }
+                if (newProgress > 60 && mWebView.getVisibility() == View.GONE) {
+                    mWebView.setVisibility(View.VISIBLE);
+
+                }
+
+                progressBar.setProgress(newProgress);
+                if (progressBar != null && newProgress != 100) {
+                    progressBar.setVisibility(View.VISIBLE);
+                } else if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
-
         mWebView.setDownloadListener(new DownloadListener() {
 
             @Override
@@ -623,20 +630,20 @@ public class BrowserFragment extends SwipeBackFragment {
         webSetting.setDatabasePath(getActivity().getDir("databases", 0).getPath());
         webSetting.setGeolocationDatabasePath(getActivity().getDir("geolocation", 0)
                 .getPath());
-        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+//         webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
         webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
         webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
-        // webSetting.setPreFectch(true);
+//         webSetting.setPreFectch(true);/
         long time = System.currentTimeMillis();
-        if (mIntentUrl == null) {
-            mWebView.loadUrl(mHomeUrl);
-        } else {
-            mWebView.loadUrl(mIntentUrl.toString());
-        }
-        TbsLog.d("time-cost", "cost time: "
-                + (System.currentTimeMillis() - time));
-        CookieSyncManager.createInstance(getActivity());
-        CookieSyncManager.getInstance().sync();
+//        if (mIntentUrl == null) {
+//            mWebView.loadUrl(mHomeUrl);
+//        } else {
+//            mWebView.loadUrl(mIntentUrl.toString());
+//        }
+//        TbsLog.d("time-cost", "cost time: "
+//                + (System.currentTimeMillis() - time));
+//        CookieSyncManager.createInstance(getActivity());
+//        CookieSyncManager.getInstance().sync();
     }
 
     /**
@@ -652,10 +659,92 @@ public class BrowserFragment extends SwipeBackFragment {
 
     @Override
     public void onDestroy() {
+        Log.e("VV", getClass().getName() + "___________onDestroy" + ((SupportActivity) getActivity()).getFragmentRecords() + "/" + mSearchBar.getTranslationX());
+        int size = ((SupportActivity) getActivity()).getFragmentRecords();
+        if (size == 2 && mSearchBar.getTranslationX() == 0) {
+            ViewCompat.setTranslationY(mSearchBar,-mSearchBar.getMeasuredHeight());
+        }
         if (mWebView != null)
             mWebView.destroy();
         super.onDestroy();
     }
+
+    @Override
+    public void onDragStateChange(int state) {
+        Log.e("VV", "______onDragStateChange:" + state);
+    }
+
+    @Override
+    public void onEdgeTouch(int oritentationEdgeFlag) {
+
+    }
+
+
+    @Override
+    public void onDragScrolled(float scrollPercent) {
+
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+        super.onAnimationStart(animation);
+        Log.e("VV", "______onAnimationStart:");
+        ViewCompat.setTranslationX(mSearchBar, 0);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mSearchBar, "translationY", 0);
+        animator.setDuration(animation.getDuration());
+        animator.setInterpolator(new FastOutSlowInInterpolator());
+        animator.start();
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        super.onAnimationEnd(animation);
+        Log.e("VV", "onAnimationEnd:");
+        ViewCompat.setPaddingRelative((View) mWebView.getParent(), 0, mSearchBar.getMeasuredHeight(), 0, 0);
+        long time = System.currentTimeMillis();
+        if (mEnableLoadUrl) {
+            if (mIntentUrl == null) {
+                mWebView.loadUrl(mHomeUrl);
+            } else {
+                mWebView.loadUrl(mIntentUrl.toString());
+            }
+            mEnableLoadUrl = false;
+        }
+
+        TbsLog.d("time-cost", "cost time: "
+                + (System.currentTimeMillis() - time));
+        CookieSyncManager.createInstance(getActivity());
+        CookieSyncManager.getInstance().sync();
+    }
+
+    @Override
+    protected void onHidden() {
+        super.onHidden();
+        Log.e("VV", "onHidden:");
+
+    }
+
+    @Override
+    protected void onShow() {
+        super.onShow();
+
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        Log.e("VV", "onBackPressedSupport:");
+
+        mEnableLoadUrl = false;
+        return super.onBackPressedSupport();
+
+    }
+
+    @Override
+    protected FragmentAnimator onCreateFragmentAnimation() {
+        return new DefaultHorizontalAnimator();
+    }
+
     private enum TEST_ENUM_FONTSIZE {
         FONT_SIZE_SMALLEST, FONT_SIZE_SMALLER, FONT_SIZE_NORMAL, FONT_SIZE_LARGER, FONT_SIZE_LARGEST
     }

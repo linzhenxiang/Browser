@@ -8,6 +8,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -22,7 +23,7 @@ import me.yokeyword.fragmentation.helper.OnAnimEndListener;
 /**
  * Created by YoKeyword on 16/1/22.
  */
-public class SupportFragment extends Fragment {
+public class SupportFragment extends Fragment implements Animation.AnimationListener {
     private static final String FRAGMENTATION_STATE_SAVE_ANIMATOR = "fragmentation_sate_save_animator";
 
     // LaunchMode
@@ -99,6 +100,9 @@ public class SupportFragment extends Fragment {
         mExitAnim = AnimationUtils.loadAnimation(_mActivity, mFragmentAnimator.getExit());
         mPopEnterAnim = AnimationUtils.loadAnimation(_mActivity, mFragmentAnimator.getPopEnter());
         mPopExitAnim = AnimationUtils.loadAnimation(_mActivity, mFragmentAnimator.getPopExit());
+        mEnterAnim.setAnimationListener(this);
+
+
     }
 
     private void handleNoAnim() {
@@ -215,9 +219,26 @@ public class SupportFragment extends Fragment {
                 return mPopExitAnim;
             }
         } else if (transit == FragmentTransaction.TRANSIT_FRAGMENT_CLOSE) {
+
             if (enter) {
+                mPopEnterAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                       SupportFragment.this.onAnimationStart(animation);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        SupportFragment.this.onAnimationStart(animation);
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
                 return mPopEnterAnim;
             } else {
+
                 return mExitAnim;
             }
         }
@@ -286,6 +307,20 @@ public class SupportFragment extends Fragment {
      * 隐藏 不可见
      */
     protected void onHidden() {
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 
 

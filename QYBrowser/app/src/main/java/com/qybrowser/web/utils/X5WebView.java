@@ -428,4 +428,8 @@ public class X5WebView extends WebView {
 		}
 		return super_onTouchEvent(event);
 	}
+
+
+
+
 }

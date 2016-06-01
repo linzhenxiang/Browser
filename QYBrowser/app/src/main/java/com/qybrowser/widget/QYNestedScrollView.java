@@ -8,7 +8,6 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewParent;
 import android.widget.ScrollView;
@@ -52,6 +51,7 @@ public class QYNestedScrollView extends ScrollView {
     private float mOldDexY;
     private int downX;
     private int downY;
+    private boolean mEnableLayout = true;
 
     public QYNestedScrollView(Context context) {
         this(context,null);
@@ -74,12 +74,29 @@ public class QYNestedScrollView extends ScrollView {
         super.fling(velocityY);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        if (mEnableLayout) {
+            super.onLayout(changed, l, t, r, b);
+            mEnableLayout = false;
+        }
 
+    }
 
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        mEnableLayout = true;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.e("EE", "CRScrolll------onInterceptTouchEvent" + getScaleX() + "/" + getTranslationY() + "/" + ((View) getParent()).getScaleY());
 
        /*
          * This method JUST determines whether we want to intercept the motion.
